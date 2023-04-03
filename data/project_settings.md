@@ -28,7 +28,7 @@ tzdata==2023.3
 - 냉django 프로젝트의 소스 트리 구조
 - 장고의 MTV 패턴을 적용
 - homepage(메인 페이지), users(회원), refrigerators(냉장고), recsys(추천) 4가지 기능으로 구성
-- 개별 앱에서도 세부 기능 기준으로 url, model, serializer, view, template가 분리
+- 개별 앱에서도 세부 기능 기준으로 url, model, serializer, view가 분리
 - static 파일(Nginx가 서빙할 정적 파일)은 별도의 파일에 분리
 - AI 앱은 별도의 FastAPI(or Flask)로 rest api 통신을 통해 추론 요청/결과를 주고받을 예정
 
