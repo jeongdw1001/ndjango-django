@@ -1,0 +1,91 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+        {% load static %}
+		<link rel="short icon" href="#">
+		<meta name="author" content="Darko Bunic"/>
+		<meta name="description" content="Drag and drop table content with JavaScript"/>
+		<meta name="viewport" content="width=device-width, user-scalable=no"/><!-- "position: fixed" fix for Android 2.2+ -->
+		<link rel="stylesheet" href="{% static 'refrigerators/icon_display/icon.css' %}" type="text/css" media="screen" />
+        <script type="text/javascript" src="{% static 'refrigerators/icon_display/header.js' %}"></script>
+        <script type="text/javascript" src="{% static 'refrigerators/icon_display/redips-drag-min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'refrigerators/icon_display/icon.js' %}"></script>
+		<title>Example 27: TD content</title>
+	</head>
+	<body>
+		<!-- tables inside this DIV could have drag-able content -->
+		<div id="redips-drag">
+			<!-- left container -->
+			<div id="left">
+				<table id="table1">
+					<colgroup>
+						<col width="100"/>
+					</colgroup>
+					<tr>
+						<td class="redips-single">
+							<div id="a" class="redips-drag redips-clone orange">오렌지</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="redips-single">
+							<div id="b" class="redips-drag redips-clone green">포도</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="redips-single">
+							<div id="c" class="redips-drag redips-clone blue">배</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="redips-single">
+							<div id="d" class="redips-drag redips-clone green">사과</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="redips-single">
+							<div id="e" class="redips-drag redips-clone orange">양파</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="redips-trash">Trash</td>
+					</tr>
+				</table>
+			</div>
+
+
+			<!-- right container -->
+			<div id="right">
+				<table id="table2">
+					<colgroup>
+						<col width="50"/> <!--  first activity column -->
+						<col width="100"/> <!--  second activity column -->
+						<col width="100"/> <!--  second activity column -->
+						<col width="100"/> <!--  second activity column -->
+						<col width="100"/> <!--  second activity column -->
+						<col width="100"/> <!--  second activity column -->
+					</colgroup>
+					<tr>
+						<td>세연이의 냉장칸</td>
+						<td id="td1"></td>
+						<td id="td2"></td>
+						<td id="td3"></td>
+						<td id="td4"></td>
+						<td id="td5"></td>
+					</tr>
+					<tr>
+						<td>냉동</td>
+						<td id="td6"></td>
+						<td id="td7"></td>
+						<td id="td8"></td>
+						<td id="td9"></td>
+						<td id="td10"></td>
+					</tr>
+				</table>
+			</div>
+
+			<!-- display block content -->
+			<div id="message"/>
+		</div>
+	</body>
+</html>
