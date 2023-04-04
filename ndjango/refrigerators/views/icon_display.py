@@ -18,6 +18,9 @@ from refrigerators.serializers import GrocerySerializer
 냉장고 식재료 위치 제어 모듈
 '''
 
+'''
+test 수정
+'''
 
 def view_d(request):
     return HttpResponse('homepage')
