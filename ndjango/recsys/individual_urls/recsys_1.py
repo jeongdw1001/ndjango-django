@@ -9,3 +9,6 @@ urlpatterns = [
     path('recipes/ingredient', recsys_1.recipes_ingredient, name="rec-ingredient"),
 
 ]
+
+def recing(input):
+    
