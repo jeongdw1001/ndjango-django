@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from refrigerators.forms import *
 from refrigerators.models import Grocery
 from django.core.files.storage import FileSystemStorage
-from django.core.files.storage import default_storage
 
 '''
 수기 입력 및 CRUD 모듈 + 알림 모듈
@@ -43,25 +42,31 @@ def edit(request, pk):
         form = GrosForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             grocery = form.save(commit=False)
-            image = request.FILES.get('image')
-            if image:
-                # if a new image was uploaded, save it
-                filename = default_storage.save(image.name, image)
-                grocery.image = filename
+            fs = FileSystemStorage()
+            if request.POST.get('image-clear'):  # check if image field was cleared
                 # delete the old image file if it exists
                 if post.image:
-                    default_storage.delete(post.image.name)
-            else:
-                # if the image was cleared, delete the old image file
-                if post.image:
-                    default_storage.delete(post.image.name)
+                    fs.delete(post.image.name)
                 grocery.image = None
+            else:
+                image = request.FILES.get('image')
+                if image:
+                    # if a new image was uploaded, save it
+                    filename = fs.save(image.name, image)
+                    grocery.image = filename
+                    # delete the old image file if it exists
+                    if post.image:
+                        fs.delete(post.image.name)
+                else:
+                    # keep the old image
+                    grocery.image = post.image
             grocery.save()
             return redirect('refrigerators:index')
     else:
         form = GrosForm(instance=post)
     context = {'form': form}
     return render(request, 'refrigerators/crud_edit.html', context)
+
 
 def delete(request, pk):
     grocery = get_object_or_404(Grocery, id=pk)
