@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from refrigerators.forms import *
 from refrigerators.models import Grocery
 from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+from django.views.static import serve
+import os
 
 '''
 수기 입력 및 CRUD 모듈 + 알림 모듈
@@ -16,21 +19,20 @@ def index(request):
 
 def register(request):
     if request.method == 'POST':
-        form = GrosForm(request.POST, request.FILES or None)
+        form = GrocForm(request.POST, request.FILES)
         if form.is_valid():
             grocery = form.save(commit=False)
-            if request.FILES:
-                grocery.image = request.FILES['image']
-            fs = FileSystemStorage()
-            filename = fs.save(grocery.image.name, grocery.image)
-            grocery.image = filename
+            if grocery.image:
+                fs = FileSystemStorage()
+                filename = fs.save(grocery.image.name, grocery.image)
+                grocery.image = filename
             grocery.save()
             return redirect('refrigerators:index')
     else:
-        form = GrosForm()       # form 생성
+        form = GrocForm()
     context = {'form':form}
     return render(request, 'refrigerators/crud_register.html', context)
-
+    
 def view(request, pk):
     grocery_list = get_object_or_404(Grocery, id=pk)
     context = {'grocery_list': grocery_list}
@@ -39,7 +41,7 @@ def view(request, pk):
 def edit(request, pk):
     post = get_object_or_404(Grocery, id=pk)
     if request.method == 'POST':
-        form = GrosForm(request.POST, request.FILES, instance=post)
+        form = GrocForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             grocery = form.save(commit=False)
             fs = FileSystemStorage()
@@ -63,12 +65,20 @@ def edit(request, pk):
             grocery.save()
             return redirect('refrigerators:index')
     else:
-        form = GrosForm(instance=post)
+        form = GrocForm(instance=post)
     context = {'form': form}
     return render(request, 'refrigerators/crud_edit.html', context)
-
 
 def delete(request, pk):
     grocery = get_object_or_404(Grocery, id=pk)
     grocery.delete()
     return redirect('refrigerators:index')
+
+def serve_grocery_image(request, pk):
+    grocery = get_object_or_404(Grocery, pk=pk)
+    if not grocery.image:
+        raise Http404("Image not found")
+    # construct the path to the image file
+    path = os.path.join(settings.MEDIA_ROOT, str(grocery.image))
+    # serve the image
+    return serve(request, path, document_root=settings.MEDIA_ROOT)

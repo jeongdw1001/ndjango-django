@@ -11,4 +11,5 @@ urlpatterns = [
     path('edit/<int:pk>/', base_crud.edit, name='edit'),
     path('view/<int:pk>/', base_crud.view, name='view'),
     path('delete/<int:pk>/', base_crud.delete, name='delete'),
+    path('media/<int:pk>/', base_crud.serve_grocery_image, name='image'),
 ]

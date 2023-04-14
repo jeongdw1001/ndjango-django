@@ -25,8 +25,3 @@ class Grocery(models.Model):
 
     def get_category_display_name(self):
         return dict(CATEGORY_CHOICES)[self.category]
-'''    
-class Photo(models.Model):
-    grocery = models.ForeignKey(Grocery, on_delete=models.CASCADE, null=True)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
-'''

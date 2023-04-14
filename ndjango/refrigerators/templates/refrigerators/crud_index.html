@@ -3,8 +3,11 @@
 
 <div class="container">
     <div class="row pt-4 my-3">
-        <div class="col-md-12">
+        <div class="col-md-12" style="float: left;">
             <h3>냉장고</h3>
+            <div style="padding: 2px 20px; float: right;">
+                <a href="{% url 'refrigerators:register' %}" class="btn btn-primary">식재료 등록</a>
+            </div>
         </div>
     </div>
     <div class="row my-3">
@@ -30,10 +33,12 @@
                     <td>{{ grocery.exp_date|date:"Y-m-d" }}</td>
                     {% if grocery.image %}
                         <td>
-                            <a href="{{ grocery.image.url }}"><img src="{{ grocery.image.url }}" alt=사진></a>
+                            <a href="{% url 'refrigerators:image' grocery.id %}">확인</a>
                         </td>
-                    {% else %}
-                        <td>No image available</td>
+                        {% else %}
+                        <td>
+                            <a href="{% url 'refrigerators:edit' grocery.id %}">등록</a>
+                        </td>
                     {% endif %}
                     <td>
                         <a href="{% url 'refrigerators:edit' grocery.id %}" class="btn btn-outline-info btn-sm">수정</a>
@@ -43,9 +48,6 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div>
-    <div style="padding: 2px 20px; float:right;">
-        <a href="{% url 'refrigerators:register' %}" class="btn btn-primary">식재료 등록</a>
     </div>
 </div>
 

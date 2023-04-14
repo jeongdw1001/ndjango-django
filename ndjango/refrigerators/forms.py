@@ -5,7 +5,7 @@ from refrigerators.models import *
 class DateInput(forms.DateInput):
         input_type = 'date'
 
-class GrosForm(forms.ModelForm):
+class GrocForm(forms.ModelForm):
     class Meta:
         model = Grocery
         fields = ['name', 'category', 'qty', 'in_date', 'exp_date', 'image']
