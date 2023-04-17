@@ -33,7 +33,7 @@
                     <td>{{ grocery.exp_date|date:"Y-m-d" }}</td>
                     {% if grocery.image %}
                         <td>
-                            <a href="{% url 'refrigerators:image' grocery.id %}">확인</a>
+                            <a href="{% url 'refrigerators:image' grocery.id %}" target="_blank">확인</a>
                         </td>
                         {% else %}
                         <td>
@@ -42,6 +42,7 @@
                     {% endif %}
                     <td>
                         <a href="{% url 'refrigerators:edit' grocery.id %}" class="btn btn-outline-info btn-sm">수정</a>
+                        <a href="https://www.coupang.com/np/search?component=&q={{ grocery.name }}" onclick="if(!confirm('{{ grocery.name }} 추가 구매를 원하십니까? \n구매 페이지로 이동합니다.')){return false;}" class="btn btn-outline-primary btn-sm" target="_blank">구매</a>
                         <a href="{% url 'refrigerators:delete' grocery.id %}" onclick="if(!confirm('정말 삭제하시겠습니까?')){return false;}" class="btn btn-outline-danger btn-sm">삭제</a>
                     </td>
                 </tr>

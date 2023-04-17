@@ -11,21 +11,25 @@ import os
 수기 입력 및 CRUD 모듈 + 알림 모듈
 '''
 
-# Create your views here.
+# index 페이지 view
 def index(request):
     grocery_list = Grocery.objects.all().order_by('-id')
     context = {'grocery_list': grocery_list}
     return render(request, 'refrigerators/crud_index.html', context)
 
+# 식재료 등록 페이지 view
 def register(request):
     if request.method == 'POST':
         form = GrocForm(request.POST, request.FILES)
         if form.is_valid():
             grocery = form.save(commit=False)
-            if grocery.image:
+            image = request.FILES.get('image')
+            if image:
                 fs = FileSystemStorage()
-                filename = fs.save(grocery.image.name, grocery.image)
+                filename = fs.save(image.name, image.file)
                 grocery.image = filename
+            else :
+                grocery.image = None
             grocery.save()
             return redirect('refrigerators:index')
     else:
@@ -33,11 +37,13 @@ def register(request):
     context = {'form':form}
     return render(request, 'refrigerators/crud_register.html', context)
     
+# 식재료 상세 페이지 view
 def view(request, pk):
     grocery_list = get_object_or_404(Grocery, id=pk)
     context = {'grocery_list': grocery_list}
     return render(request, 'refrigerators/crud_view.html', context)
 
+# 식재료 정보 수정 페이지 view
 def edit(request, pk):
     post = get_object_or_404(Grocery, id=pk)
     if request.method == 'POST':
@@ -52,13 +58,12 @@ def edit(request, pk):
                 grocery.image = None
             else:
                 image = request.FILES.get('image')
-                if image:
-                    # if a new image was uploaded, save it
-                    filename = fs.save(image.name, image)
+                if image: # 새로운 이미지가 업로드 되면
+                    # delete old image
+                    fs.delete(post.image.name)
+                    # save new image
+                    filename = fs.save(image.name, image.file)
                     grocery.image = filename
-                    # delete the old image file if it exists
-                    if post.image:
-                        fs.delete(post.image.name)
                 else:
                     # keep the old image
                     grocery.image = post.image
@@ -69,16 +74,24 @@ def edit(request, pk):
     context = {'form': form}
     return render(request, 'refrigerators/crud_edit.html', context)
 
+# 식재료 삭제 view
 def delete(request, pk):
     grocery = get_object_or_404(Grocery, id=pk)
     grocery.delete()
     return redirect('refrigerators:index')
 
+# 식재료 사진 view
 def serve_grocery_image(request, pk):
     grocery = get_object_or_404(Grocery, pk=pk)
     if not grocery.image:
         raise Http404("Image not found")
     # construct the path to the image file
-    path = os.path.join(settings.MEDIA_ROOT, str(grocery.image))
+    path = os.path.join(settings.MEDIA_ROOT, str(grocery.image.name))
     # serve the image
     return serve(request, path, document_root=settings.MEDIA_ROOT)
+
+# 식재료 구매 링크 view
+#def buy(request, pk):
+#    grocery = get_object_or_404(Grocery, id=pk)
+#    name = grocery.name
+#    return redirect("https://www.coupang.com/np/search?component=&q=%EC%82%AC%EA%B3%BC&channel=user")

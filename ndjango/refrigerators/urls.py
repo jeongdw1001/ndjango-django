@@ -33,8 +33,7 @@ urlpatterns = [
 #
 #     # path('create', views.article_create, name="create"),
 #     # path('slug/<str:slug>', views.article_details, name="detail"),
-]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # urlpatterns = barcode_urls
 # urlpatterns += base_urls
