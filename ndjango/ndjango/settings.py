@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 import json
 from django.core.exceptions import ImproperlyConfigured
+from django.core.files.storage import FileSystemStorage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -107,9 +108,9 @@ DATABASES = {
          'OPTIONS': {
              'sql_mode': 'traditional',
          },
-         'NAME': 'temp',
-         'USER': 'root',
-         'PASSWORD': '123123',
+         'NAME': 'contents',
+         'USER': 'ndjango',
+         'PASSWORD': '1234',
          'HOST': 'localhost',
          'PORT': '3306',
      }
@@ -167,6 +168,8 @@ if DEBUG:
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
