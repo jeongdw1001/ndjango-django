@@ -1,34 +1,25 @@
 {% extends 'base.html' %}
+
+{% block content %}
+  <h1></h1>
+  {% if groceries %}
+    <ul>
+      {% for grocery in groceries %}
+        <li>{{ grocery.name }} - {{ grocery.exp_date }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No groceries are expiring within the next three days.</p>
+  {% endif %}
+{% endblock %}
+
+{% extends 'base.html' %}
 {% block content %}
 
-{% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ message }}
-    </div>
-    {% endfor %}
-{% endif %}
-
 <div class="container">
-    {% if expiring_groceries %}
-    <div class="alert alert-warning">
-        <p>One or more groceries are going to expire in three days or less:</p>
-        <ul>
-        {% for grocery in expiring_groceries %}
-            <li>{{ grocery.name }}</li>
-        {% endfor %}
-        </ul>
-        <p>Do you want to order these groceries on Amazon?</p>
-        <button onclick="if(!confirm('{{ grocery.name }} 추가 구매를 원하십니까? \n구매 페이지로 이동합니다.')){return false;}">Yes</button>
-    </div>
-    {% endif %}
     <div class="row pt-4 my-3">
         <div class="col-md-12" style="float: left;">
-            <h3>냉장고</h3>
-            <div style="padding: 2px 20px; float: right;">
-                <a href="{% url 'refrigerators:insertion_method' %}" class="btn btn-primary">식재료 등록</a>
-
-            </div>
+            <h3>소비기한이 임박한 식재료</h3>
         </div>
     </div>
     <div class="row my-3">

@@ -3,12 +3,12 @@ from django.forms import widgets
 from refrigerators.models import *
 
 class DateInput(forms.DateInput):
-        input_type = 'date'
+    input_type = 'date'
 
 class GrocForm(forms.ModelForm):
     class Meta:
         model = Grocery
-        fields = ['name', 'category', 'qty', 'in_date', 'exp_date', 'image']
+        fields = ['name', 'category', 'qty', 'in_date', 'exp_date', 'image', 'insertion_method', 'userid', 'parsed_name']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
@@ -16,4 +16,7 @@ class GrocForm(forms.ModelForm):
             'in_date': DateInput(attrs={'class': 'form-control'}),
             'exp_date': DateInput(attrs={'class': 'form-control'}),
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'userid': forms.HiddenInput(),
+            'parsed_name': forms.HiddenInput(),
+            'insertion_method': forms.HiddenInput()
         }
