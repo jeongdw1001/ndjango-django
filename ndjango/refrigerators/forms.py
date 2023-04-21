@@ -9,6 +9,14 @@ class GrocForm(forms.ModelForm):
     class Meta:
         model = Grocery
         fields = ['name', 'category', 'qty', 'in_date', 'exp_date', 'image', 'insertion_method', 'userid', 'parsed_name']
+        labels = {
+            'name': '제품명',
+            'category': '카테고리',
+            'qty': '개수',
+            'in_date': '입고일',
+            'exp_date': '소비기한',
+            'image': '사진',
+        }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
@@ -20,3 +28,4 @@ class GrocForm(forms.ModelForm):
             'parsed_name': forms.HiddenInput(),
             'insertion_method': forms.HiddenInput()
         }
+        

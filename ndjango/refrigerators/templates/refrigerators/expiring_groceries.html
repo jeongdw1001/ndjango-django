@@ -1,25 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1></h1>
-  {% if groceries %}
-    <ul>
-      {% for grocery in groceries %}
-        <li>{{ grocery.name }} - {{ grocery.exp_date }}</li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No groceries are expiring within the next three days.</p>
-  {% endif %}
-{% endblock %}
-
-{% extends 'base.html' %}
-{% block content %}
-
 <div class="container">
+    {% if expiring_groceries %}
     <div class="row pt-4 my-3">
         <div class="col-md-12" style="float: left;">
-            <h3>소비기한이 임박한 식재료</h3>
+            <h3>소비기한이 임박하거나 만료된 식재료</h3>
         </div>
     </div>
     <div class="row my-3">
@@ -32,11 +18,10 @@
                 <th>입고일</th>
                 <th>소비기한</th>
                 <th>사진</th>
-                <th>비고</th>
                 <th></th>
             </thead>
             <tbody>
-                {% for grocery in grocery_list %}
+                {% for grocery in expiring_groceries %}
                 <tr>
                     <td>{{ forloop.revcounter }}</td>
                     <td><a href="{% url 'refrigerators:view' grocery.id %}">{{ grocery.name }}</a></td>
@@ -54,17 +39,22 @@
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{% url 'refrigerators:edit' grocery.id %}" class="btn btn-outline-info btn-sm">수정</a>
-                        <a href="{% url 'refrigerators:delete' grocery.id %}" onclick="if(!confirm('정말 삭제하시겠습니까?')){return false;}" class="btn btn-outline-danger btn-sm">삭제</a>
-                    </td>
-                    <td>
                         <a href="https://www.coupang.com/np/search?component=&q={{ grocery.name }}" onclick="if(!confirm('{{ grocery.name }} 추가 구매를 원하십니까? \n구매 페이지로 이동합니다.')){return false;}" class="btn btn-outline-primary btn-sm" target="_blank">구매</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <div style="float:right;">
+            <a href="{% url 'refrigerators:index' %}" class="btn btn-primary">식재료 목록</a>
+        </div>
     </div>
+    {% else %}
+    <div class="row pt-4 my-3">
+        <div class="col-md-12" style="float: left;">
+            <h3>소비기한이 3일 이내로 남은 식재료가 없습니다.</h3>
+        </div>
+    </div>
+    {% endif %}
 </div>
-
 {% endblock %}

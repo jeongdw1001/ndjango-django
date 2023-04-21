@@ -19,12 +19,17 @@ def index(request):
     grocery_list = Grocery.objects.all().order_by('exp_date')
     today = timezone.now().date()
     expiring_groceries = []
+    expired_groceries = []
     for grocery in grocery_list:
         days_until_expire = (grocery.exp_date - today).days
-        if days_until_expire <= 3:
+        if days_until_expire < 0:
+            expired_groceries.append(grocery)
+        elif days_until_expire <= 3:
             expiring_groceries.append(grocery)
+    if expired_groceries:
+        messages.error(request, f"소비기한이 만료된 식재료가 {len(expired_groceries)}개 있어요!", extra_tags='alert-dismissible expired') 
     if expiring_groceries:
-        messages.warning(request, f"소비기한이 3일 내에 만료되는 식재료가 {len(expiring_groceries)}개 있어요!")
+        messages.warning(request, f"소비기한이 3일 내에 만료되는 식재료가 {len(expiring_groceries)}개 있어요!", extra_tags='alert-dismissible expiring')
     context = {'grocery_list': grocery_list}
     return render(request, 'refrigerators/crud_index.html', context)
 
@@ -101,6 +106,8 @@ def edit(request, pk):
                     # keep the old image
                     grocery.image = post.image
             grocery.save()
+            if grocery.qty == 0:
+                messages.warning(request, 'The quantity of this grocery is now zero.')
             return redirect('refrigerators:index')
     else:
         form = GrocForm(instance=post)
@@ -127,5 +134,5 @@ def expiring_groceries(request):
     today = timezone.now().date()
     expiring_groceries = Grocery.objects.filter(exp_date__lte=today + timezone.timedelta(days=3))
     print(expiring_groceries)
-    context = {'groceries': expiring_groceries}
+    context = {'expiring_groceries': expiring_groceries}
     return render(request, 'refrigerators/expiring_groceries.html', context)
