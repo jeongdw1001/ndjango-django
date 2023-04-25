@@ -3,9 +3,20 @@
 
 {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ message }}
-    </div>
+        {% if 'expired' in message.tags.split %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <a href="{% url 'refrigerators:expiring' %}" class="btn btn-primary ms-2">확인하기</a>
+            </div>
+        {% endif %}
+        {% if 'expiring' in message.tags.split %}
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <a href="{% url 'refrigerators:expiring' %}" class="btn btn-primary ms-2">확인하기</a>
+            </div>
+        {% endif %}
     {% endfor %}
 {% endif %}
 
@@ -42,7 +53,7 @@
                 <th>소비기한</th>
                 <th>사진</th>
                 <th>비고</th>
-                <th></th>
+                <th>구매</th>
             </thead>
             <tbody>
                 {% for grocery in grocery_list %}
@@ -50,7 +61,12 @@
                     <td>{{ forloop.revcounter }}</td>
                     <td><a href="{% url 'refrigerators:view' grocery.id %}">{{ grocery.name }}</a></td>
                     <td>{{ grocery.get_category_display_name }}</td>
-                    <td>{{ grocery.qty }}</td>
+                    <td>
+                        {{ grocery.qty }}
+                        {% if grocery.qty == 0 %}
+                            <span class="badge badge-danger" style="background-color: red; color: white;">Out</span>
+                        {% endif %}
+                    </td>
                     <td>{{ grocery.in_date|date:"Y-m-d" }}</td>
                     <td>{{ grocery.exp_date|date:"Y-m-d" }}</td>
                     {% if grocery.image %}
@@ -77,3 +93,8 @@
 </div>
 
 {% endblock %}
+
+.badge-danger {
+    background-color: red;
+    color: white;
+}
