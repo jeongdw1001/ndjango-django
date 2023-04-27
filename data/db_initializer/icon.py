@@ -58,7 +58,8 @@ if __name__ == '__main__':
     for idx, item in enumerate(cat_list):
         record = item.replace('.png', '')
         print(idx+1, record, item)
-        insertBLOB(idx+1, record, item, db='ndjango_master')
+        insertBLOB(idx+1, record, item)
+        # insertBLOB(idx+1, record, item, db='ndjango_master')
 
         b = 0
 
