@@ -162,3 +162,4 @@ cython_debug/
 
 # secret info
 mysecrets.py
+secrets.json
