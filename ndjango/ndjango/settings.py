@@ -102,6 +102,9 @@ WSGI_APPLICATION = 'ndjango.wsgi.application'
 #     }
 # }
 
+TEST_IF = False
+
+
 DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.mysql',
@@ -115,6 +118,9 @@ DATABASES = {
          'PORT': '3306',
      }
 }
+
+if TEST_IF:
+    DATABASES['default']['NAME'] = 'ndjango_master'
 
 
 # Password validation
