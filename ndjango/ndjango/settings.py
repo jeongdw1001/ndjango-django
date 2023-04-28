@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+import json
+from django.core.exceptions import ImproperlyConfigured
+from django.core.files.storage import FileSystemStorage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y+nda=kp=wd!)j+7g9om8f1f@qa2(uk8ss1yazi7zp0@8ktwdu'
+secret_file = os.path.join(BASE_DIR, 'secrets.json')
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+
+def get_secret(setting):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+
+SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,19 +102,25 @@ WSGI_APPLICATION = 'ndjango.wsgi.application'
 #     }
 # }
 
+TEST_IF = False
+
+
 DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.mysql',
          'OPTIONS': {
              'sql_mode': 'traditional',
          },
-         'NAME': 'temp',
-         'USER': 'root',
-         'PASSWORD': '123123',
+         'NAME': 'contents',
+         'USER': 'ndjango',
+         'PASSWORD': '1234',
          'HOST': 'localhost',
          'PORT': '3306',
      }
 }
+
+if TEST_IF:
+    DATABASES['default']['NAME'] = 'ndjango_master'
 
 
 # Password validation
@@ -152,6 +174,8 @@ if DEBUG:
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
