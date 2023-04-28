@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
-from refrigerators.forms import *
+from refrigerators.forms.base_forms import *
 from refrigerators.models import Grocery
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
@@ -38,8 +38,8 @@ def insertion_method(request):
         insertion_method = request.POST.get('insertion_method')
         if insertion_method == 'manual':
             return redirect('refrigerators:register_manual')
-        elif insertion_method == 'picture':
-            return redirect('refrigerators:register_picture')
+        elif insertion_method == 'photo':
+            return redirect('refrigerators:photo_upload')
         elif insertion_method == 'barcode':
             return redirect('refrigerators:register_barcode')
     else:
