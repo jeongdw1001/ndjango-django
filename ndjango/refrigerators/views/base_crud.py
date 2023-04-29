@@ -36,14 +36,20 @@ def index(request):
 def insertion_method(request):
     if request.method == 'POST':
         insertion_method = request.POST.get('insertion_method')
-        if insertion_method == 'manual':
+        if insertion_method == '0':
             return redirect('refrigerators:register_manual')
-        elif insertion_method == 'photo':
+        elif insertion_method == '1':
             return redirect('refrigerators:photo_upload')
-        elif insertion_method == 'barcode':
+        elif insertion_method == '2':
             return redirect('refrigerators:register_barcode')
+        else:
+            # If an invalid insertion method was selected, render the template with an error message
+            error_message = 'Invalid insertion method selected.'
+            return render(request, 'refrigerators/insertion_method.html', {'error_message': error_message})
     else:
+        # If the request method was not POST, render the template without an error message
         return render(request, 'refrigerators/insertion_method.html')
+
 
 # 식재료 등록 페이지 view
 def register_manual(request):
@@ -52,6 +58,7 @@ def register_manual(request):
         if form.is_valid():
             grocery = form.save(commit=False)
             image = request.FILES.get('image')
+            grocery.userid_id = request.user.id
             if image:
                 fs = FileSystemStorage()
                 filename = fs.save(image.name, image.file)
