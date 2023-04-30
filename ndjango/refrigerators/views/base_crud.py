@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from refrigerators.forms.base_forms import *
@@ -15,8 +16,9 @@ import os
 '''
 
 # index 페이지 view
+@login_required
 def index(request):
-    grocery_list = Grocery.objects.all().order_by('exp_date')
+    grocery_list = Grocery.objects.filter(userid_id=request.user).order_by('exp_date')
     today = timezone.now().date()
     expiring_groceries = []
     expired_groceries = []
@@ -36,11 +38,11 @@ def index(request):
 def insertion_method(request):
     if request.method == 'POST':
         insertion_method = request.POST.get('insertion_method')
-        if insertion_method == '0':
+        if insertion_method == 'manual':
             return redirect('refrigerators:register_manual')
-        elif insertion_method == '1':
+        elif insertion_method == 'photo':
             return redirect('refrigerators:photo_upload')
-        elif insertion_method == '2':
+        elif insertion_method == 'barcode':
             return redirect('refrigerators:register_barcode')
         else:
             # If an invalid insertion method was selected, render the template with an error message

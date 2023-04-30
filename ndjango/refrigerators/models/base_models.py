@@ -34,15 +34,14 @@ CATEGORY_CHOICES = (
 )
 
 INSERTION_METHOD_CHOICES = (
-    ('0', 'Manual'),
-    ('1', 'Photo'),
-    ('2', 'Barcode'),
+    ('manual', 'Manual'),
+    ('photo', 'Photo'),
+    ('barcode', 'Barcode'),
 )
 
 from django.conf import settings
 
 class Grocery(models.Model):
-    # userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
     userid = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
     parsed_name = models.CharField(max_length=50, blank=True, null=True)
@@ -50,7 +49,7 @@ class Grocery(models.Model):
     qty = models.PositiveIntegerField()
     in_date = models.DateField(default=datetime.date.today)
     exp_date = models.DateField(default=datetime.date.today)
-    insertion_method = models.SmallIntegerField(choices=INSERTION_METHOD_CHOICES, default='0')
+    insertion_method = models.CharField(max_length=50, choices=INSERTION_METHOD_CHOICES, default='manual')
     image = models.ImageField(upload_to="grocery", blank=True, null=True)
 
     def get_category_display_name(self):
