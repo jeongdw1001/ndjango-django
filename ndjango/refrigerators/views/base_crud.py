@@ -5,6 +5,7 @@ from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from refrigerators.forms.base_forms import *
 from refrigerators.models import Grocery
 from django.core.files.storage import FileSystemStorage
+from django.core.paginator import Paginator
 from django.conf import settings
 from django.views.static import serve
 from django.contrib import messages
@@ -18,7 +19,12 @@ import os
 # index 페이지 view
 @login_required
 def index(request):
+    page = request.GET.get('page', '1')
     grocery_list = Grocery.objects.filter(userid_id=request.user).order_by('exp_date')
+
+    paginator = Paginator(grocery_list, 10)
+    page_obj = paginator.get_page(page)
+
     today = timezone.now().date()
     expiring_groceries = []
     expired_groceries = []
@@ -32,7 +38,7 @@ def index(request):
         messages.error(request, f"소비기한이 만료된 식재료가 {len(expired_groceries)}개 있어요!", extra_tags='alert-dismissible expired') 
     if expiring_groceries:
         messages.warning(request, f"소비기한이 3일 내에 만료되는 식재료가 {len(expiring_groceries)}개 있어요!", extra_tags='alert-dismissible expiring')
-    context = {'grocery_list': grocery_list}
+    context = {'grocery_list': page_obj}
     return render(request, 'refrigerators/crud_index.html', context)
 
 def insertion_method(request):

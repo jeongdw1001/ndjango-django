@@ -92,6 +92,24 @@
             </tbody>
         </table>
     </div>
+    <!-- 페이징 처리 --->
+    <div class="row my-3">
+        <div class="col-md-12 text-center">
+            {% if grocery_list.has_previous %}
+                <a href="?page=1">처음</a>
+                <a href="?page={{ grocery_list.previous_page_number }}">이전</a>
+            {% endif %}
+                <!-- 페이지리스트 -->
+                <span style="color:red;font-weight:bold;">{{ grocery_list.number }}</span> 
+                <span> / </span>
+                <span style="font-weight:bold;">{{ grocery_list.paginator.num_pages }}</span>
+            {% if grocery_list.has_next %}
+                <a href="?page={{ grocery_list.next_page_number }}">다음</a>
+                <a href="?page={{ grocery_list.paginator.num_pages }}">끝</a>
+            {% endif %}            
+
+        </div>
+    </div>
 </div>
 
     {% else %}
