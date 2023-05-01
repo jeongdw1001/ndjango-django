@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% if user.is_authenticated %}
+
 {% if messages %}
     {% for message in messages %}
         {% if 'expired' in message.tags.split %}
@@ -90,7 +92,36 @@
             </tbody>
         </table>
     </div>
+    <!-- 페이징 처리 --->
+    <div class="row my-3">
+        <div class="col-md-12 text-center">
+            {% if grocery_list.has_previous %}
+                <a href="?page=1">처음</a>
+                <a href="?page={{ grocery_list.previous_page_number }}">이전</a>
+            {% endif %}
+                <!-- 페이지리스트 -->
+                <span style="color:red;font-weight:bold;">{{ grocery_list.number }}</span> 
+                <span> / </span>
+                <span style="font-weight:bold;">{{ grocery_list.paginator.num_pages }}</span>
+            {% if grocery_list.has_next %}
+                <a href="?page={{ grocery_list.next_page_number }}">다음</a>
+                <a href="?page={{ grocery_list.paginator.num_pages }}">끝</a>
+            {% endif %}            
+
+        </div>
+    </div>
 </div>
+
+    {% else %}
+    <div class="container">
+        <div class="row pt-4 my-3">
+            <div class="col-md-12" style="float: left;">
+                <h3>로그인을 해 냉장고를 만드세요!</h3>
+            </div>
+        </div>
+    </div>
+
+{% endif %}
 
 {% endblock %}
 

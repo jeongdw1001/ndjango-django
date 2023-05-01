@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
-from refrigerators.forms import *
+from refrigerators.forms.base_forms import *
 from refrigerators.models import Grocery
 from django.core.files.storage import FileSystemStorage
+from django.core.paginator import Paginator
 from django.conf import settings
 from django.views.static import serve
 from django.contrib import messages
@@ -15,8 +17,14 @@ import os
 '''
 
 # index 페이지 view
+@login_required
 def index(request):
-    grocery_list = Grocery.objects.all().order_by('exp_date')
+    page = request.GET.get('page', '1')
+    grocery_list = Grocery.objects.filter(userid_id=request.user).order_by('exp_date')
+
+    paginator = Paginator(grocery_list, 10)
+    page_obj = paginator.get_page(page)
+
     today = timezone.now().date()
     expiring_groceries = []
     expired_groceries = []
@@ -30,7 +38,7 @@ def index(request):
         messages.error(request, f"소비기한이 만료된 식재료가 {len(expired_groceries)}개 있어요!", extra_tags='alert-dismissible expired') 
     if expiring_groceries:
         messages.warning(request, f"소비기한이 3일 내에 만료되는 식재료가 {len(expiring_groceries)}개 있어요!", extra_tags='alert-dismissible expiring')
-    context = {'grocery_list': grocery_list}
+    context = {'grocery_list': page_obj}
     return render(request, 'refrigerators/crud_index.html', context)
 
 def insertion_method(request):
@@ -38,12 +46,18 @@ def insertion_method(request):
         insertion_method = request.POST.get('insertion_method')
         if insertion_method == 'manual':
             return redirect('refrigerators:register_manual')
-        elif insertion_method == 'picture':
-            return redirect('refrigerators:register_picture')
+        elif insertion_method == 'photo':
+            return redirect('refrigerators:photo_upload')
         elif insertion_method == 'barcode':
             return redirect('refrigerators:register_barcode')
+        else:
+            # If an invalid insertion method was selected, render the template with an error message
+            error_message = 'Invalid insertion method selected.'
+            return render(request, 'refrigerators/insertion_method.html', {'error_message': error_message})
     else:
+        # If the request method was not POST, render the template without an error message
         return render(request, 'refrigerators/insertion_method.html')
+
 
 # 식재료 등록 페이지 view
 def register_manual(request):
@@ -52,6 +66,7 @@ def register_manual(request):
         if form.is_valid():
             grocery = form.save(commit=False)
             image = request.FILES.get('image')
+            grocery.userid_id = request.user.id
             if image:
                 fs = FileSystemStorage()
                 filename = fs.save(image.name, image.file)

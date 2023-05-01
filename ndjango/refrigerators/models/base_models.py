@@ -1,5 +1,6 @@
 import datetime
 from django.db import models
+from users.models import CustomUser
 
 CATEGORY_CHOICES = (
     ('processed_meat', '가공육류'),
@@ -34,14 +35,14 @@ CATEGORY_CHOICES = (
 
 INSERTION_METHOD_CHOICES = (
     ('manual', 'Manual'),
-    ('picture', 'Picture'),
+    ('photo', 'Photo'),
     ('barcode', 'Barcode'),
 )
 
 from django.conf import settings
 
 class Grocery(models.Model):
-    userid = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+    userid = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
     parsed_name = models.CharField(max_length=50, blank=True, null=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='grain')
