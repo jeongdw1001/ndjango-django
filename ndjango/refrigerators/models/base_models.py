@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from users.models import CustomUser
+# from django.conf import settings
 
 CATEGORY_CHOICES = (
     ('processed_meat', '가공육류'),
@@ -39,7 +40,6 @@ INSERTION_METHOD_CHOICES = (
     ('barcode', 'Barcode'),
 )
 
-from django.conf import settings
 
 class Grocery(models.Model):
     userid = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.SET_NULL)

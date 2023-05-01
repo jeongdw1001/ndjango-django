@@ -1,179 +1,112 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-	<head>
-        {% load static %}
-		<link rel="short icon" href="#">
-		<meta name="author" content="Darko Bunic"/>
-		<meta name="description" content="Drag and drop table rows with JavaScript"/>
-		<meta name="viewport" content="width=device-width, user-scalable=no"/><!-- "position: fixed" fix for Android 2.2+ -->
-		<script type="text/javascript">
-			var redipsURL = '/javascript/drag-and-drop-table-row/';
-		</script>
-        <link rel="stylesheet" href="{% static 'refrigerators/icon_display/two_doors.css' %}" type="text/css" media="screen" />
-        <script type="text/javascript" src="{% static 'refrigerators/icon_display/header.js' %}"></script>
-        <script type="text/javascript" src="{% static 'refrigerators/icon_display/redips-drag-min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'refrigerators/icon_display/two_doors.js' %}"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+{% extends 'base.html' %}
+{% block content %}
 
-		<script>
-		function button1_click() {
-			console.log("버튼1을 누르셨습니다.");
-		}
-		</script>
+{% load static %}
+<script type="text/javascript">var redipsURL = '/javascript/drag-and-drop-table-row/';</script>
+<link rel="stylesheet" href="{% static 'refrigerators/icon_display/two_doors.css' %}" type="text/css" media="screen" />
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!--<script type="text/javascript" src="{% static 'refrigerators/icon_display/redips-drag.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'refrigerators/icon_display/redips-drag-min.js' %}"></script>
+<script type="text/javascript" src="{% static 'refrigerators/icon_display/two_doors.js' %}"></script>
 
-		<title>Example 15: Drag and drop table rows</title>
-	</head>
-	<body>
-		<button onclick="button1_click();">버튼 클릭</button>
-		<button onclick="converToJson();">버튼 클릭</button>
+<article>
+	<!-- tables inside this DIV could contain drag-able content  -->
+	{% csrf_token %}
+	<div>
+		<button type="button" class="btn btn-outline-primary mb-3"
+				onclick="tableToJson('{{ request.user.id }}',document.getElementById('ice-fridge'),document.getElementById('fresh-fridge'))">
+			저장
+		</button>
+	</div>
 
-		<center>
-			<!-- tables inside this DIV could contain drag-able content  -->
-			<div id="redips-drag">
-				<table class="tbl1">
-					<colgroup>
-						<col width="30"/>
-						<col width="70"/>
-						<col width="70"/>
-						<col width="70"/>
-						<col width="70"/>
-						<col width="70"/>
-					</colgroup>
-					<tbody>
-						<tr>
-							<th colspan="6" class="redips-mark">냉동</th>
-						</tr>
+	<div id="redips-drag" style="float:left;">
+		<table class="tbl1" id="ice-fridge">
+			<colgroup>
+				<col width="30"/>
+				<col width="70"/>
+				<col width="70"/>
+				<col width="70"/>
+				<col width="70"/>
+				<col width="70"/>
+			</colgroup>
+			<tbody>
+			<tr>
+				<th colspan="6" class="redips-mark">냉동</th>
+			</tr>
+			{% for ctx in ice %}
+			<tr class="rl">
+				<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
+				{% for k, v in ctx.items %}
+				<td>
+					{% if v %}
+					<div class="redips-drag white">
+						<img src="https://cdn-icons-png.flaticon.com/512/426/426750.png?w=1380&t=st=1681199906~exp=1681200506~hmac=fcb5f90ae7cb363b274dfed7153fa68dc76882a74a0463bac3c9dee263239c25" alt="사과" style="width:15px;">
+						<a href="javascript:void(0)" title="{{v.str}}" id="joinbtn">
+							{% if v.name|length <= 4 %}
+							{{ v.name|slice:":4" }}
+							{% else %}
+							<span class="min-font-size">
+								{{ v.name }}
+							</span>
+							{% endif %}
+						</a>
+						<small name="uid" hidden="hidden">{{ v.id }}</small>
+					</div>
+					{% endif %}
+				</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
 
-                        {% for ctx in foods %}
-                            <tr class="rd">
-                                <td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
-                                {% for c in ctx %}
-                                <td><div class="redips-drag orange">{{ c }}</div></td>
-<!--                                <td>{{ c }}</td>-->
-                                {% endfor %}
-                            </tr>
-                        {% endfor %}
+			<tr>
+				<td colspan="6" class="redips-mark">
+					<span hidden="hidden">Message line</span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
 
-<!--						<tr class="rd">-->
-<!--							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--&lt;!&ndash;							<td class="cdark"></td>&ndash;&gt;-->
-<!--						</tr>-->
-<!--                        <tr class="rd">-->
-<!--                            <td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>-->
-<!--                            <td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--						</tr>-->
+		<table id="fresh-fridge">
+			<colgroup>
+				<col width="30"/>
+				<col width="70"/>
+				<col width="70"/>
+				<col width="70"/>
+				<col width="70"/>
+				<col width="70"/>
+			</colgroup>
+			<tbody>
+			<tr>
+				<th colspan="6" class="redips-mark">냉장</th>
+			</tr>
+			{% for ctx in fresh %}
+			<tr class="rl">
+				<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
+				{% for k, v in ctx.items %}
+				<td>
+					{% if v %}
+					<div class="redips-drag white">
+						<img src="https://cdn-icons-png.flaticon.com/512/426/426750.png?w=1380&t=st=1681199906~exp=1681200506~hmac=fcb5f90ae7cb363b274dfed7153fa68dc76882a74a0463bac3c9dee263239c25" alt="사과" style="width:15px;">
+						<a href="javascript:void(0)" title="{{v.str}}">{{ v.name|slice:":4" }}</a>
+						<small name="uid" hidden="hidden">{{ v.id }}</small>
+					</div>
+					{% endif %}
+				</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
 
-<!--						<tr class="rd">-->
-<!--&lt;!&ndash;						<tr class="rd">&ndash;&gt;-->
-<!--							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>-->
-<!--&lt;!&ndash;							<td><div class="redips-drag blue">rows</div></td>&ndash;&gt;-->
-<!--                            <td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--						</tr>-->
-<!--                        <tr class="rd">-->
-<!--                            <td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>-->
-<!--                            <td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--							<td></td>-->
-<!--						</tr>-->
-						<tr>
-<!--							<td colspan="6" class="redips-mark" style="display:none;">-->
-							<td colspan="6" class="redips-mark">
-                                <span hidden="hidden">Message line</span>
-                            </td>
-						</tr>
-					</tbody>
-				</table>
+			<tr>
+				<td colspan="6" class="redips-mark">
+					<span hidden="hidden">Message line</span>
+				</td>
+			</tr>
+			</tbody>
+		</table>
 
-				<table>
-					<colgroup>
-						<col width="30"/>
-						<col width="70"/>
-						<col width="70"/>
-						<col width="70"/>
-						<col width="70"/>
-						<col width="70"/>
-					</colgroup>
-					<tbody>
-						<tr>
-							<th colspan="6" class="redips-mark">냉장</th>
-						</tr>
-						<tr class="rl">
-							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-                        <tr class="rl">
-							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="rl">
-							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="rl">
-							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="rl">
-							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="rl">
-							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
-							<td></td>
-							<td><div id="a" class="redips-drag orange">오렌지</div></td>
-							<td><div class="redips-drag orange">drop</div></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="rl">
-							<td class="redips-rowhandler"><div class="redips-drag redips-row"></div></td>
-							<td></td>
-							<td></td>
-							<td><div class="redips-drag orange">drop</div></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td colspan="6" class="redips-mark"><span>Message line</span></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</center>
-	</body>
-</html>
+
+	</div>
+
+</article>
+
+{% endblock %}
