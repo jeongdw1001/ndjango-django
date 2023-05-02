@@ -37,3 +37,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_nickname(self):
         return self.nickname
+
