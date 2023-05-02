@@ -48,8 +48,11 @@ class AccountAuthForm(forms.ModelForm):
         return cleaned_data
 
 
-AGE_CHOICES = [(i, str(i)) for i in range(1, 101)]
+# AGE_CHOICES = [(i, str(i)) for i in range(1, 101)]
+
+
 class CustomUserChangeForm(UserChangeForm):
+    AGE_CHOICES = [(i, str(i)) for i in range(1, 101)]
 
     age = forms.ChoiceField(choices=AGE_CHOICES)
 
@@ -91,9 +94,10 @@ class CustomUserChangeForm(UserChangeForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         allergy = self.cleaned_data.get('allergy')
-        allergy = {'allergy':allergy}
-        print(allergy)
-        user.allergy = json.dumps(allergy)
+        allergy = {'allergy': allergy}
+        user.allergy = allergy
+        # user.allergy = json.dumps(allergy)
         if commit:
             user.save()
         return user
+

@@ -56,7 +56,10 @@ def update_view(request):
             editForm.save()
             return redirect('/')
     else:
+        user = request.user
+        user.allergy = user.allergy['allergy']
         editForm = CustomUserChangeForm(instance=request.user)
+
 
     return render(request, "users/update.html", {'editForm': editForm})
     
