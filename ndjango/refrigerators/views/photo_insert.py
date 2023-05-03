@@ -26,19 +26,15 @@ def photo_upload(request):
         form = PhotoForm()
     return render(request, 'refrigerators/photo_upload.html', {'form': form})
 
+# 사진 분석
 def process_image(image):
-    # Code to process image using AI algorithm
-    # Make a POST request to the Flask API
+    # Flask 앱으로 접속해 분석 진행
     url = 'http://localhost:5000/predict'
     files = {'image': image}
     response = requests.post(url, files=files)
     print(response.json())
     prediction = response.json()
     return prediction
-
-def photo_predict(image):
-    # Code to predict grocery from image using the machine learning model
-    pass
 
 def convert_to_grocery_data(prediction):
     # Convert the prediction to a list of dictionaries
