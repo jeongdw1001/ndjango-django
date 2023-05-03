@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from refrigerators.views import photo_insert
 
 '''
@@ -9,4 +9,5 @@ from refrigerators.views import photo_insert
 
 urlpatterns = [
     path('upload/', photo_insert.photo_upload, name="photo_upload"),
+    path('predict/', photo_insert.photo_predict, name="photo_predict"),
 ]
