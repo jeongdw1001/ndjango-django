@@ -119,7 +119,7 @@ DATABASES = {
      }
 }
 
-TEST_DB = 'contents1'
+TEST_DB = 'contents'
 # TEST_DB = None
 
 if TEST_DB:
