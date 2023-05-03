@@ -12,6 +12,9 @@ from django.contrib import messages
 from django.utils import timezone
 import os
 
+from refrigerators.views.base_to_icon import set_grocery_location
+from refrigerators.views.base_to_icon import remove_grocery_location
+
 '''
 수기 입력 및 CRUD 모듈 + 알림 모듈
 '''
@@ -35,7 +38,7 @@ def index(request):
         elif days_until_expire <= 3:
             expiring_groceries.append(grocery)
     if expired_groceries:
-        messages.error(request, f"소비기한이 만료된 식재료가 {len(expired_groceries)}개 있어요!", extra_tags='alert-dismissible expired') 
+        messages.error(request, f"소비기한이 만료된 식재료가 {len(expired_groceries)}개 있어요!", extra_tags='alert-dismissible expired')
     if expiring_groceries:
         messages.warning(request, f"소비기한이 3일 내에 만료되는 식재료가 {len(expiring_groceries)}개 있어요!", extra_tags='alert-dismissible expiring')
     context = {'grocery_list': page_obj}
@@ -73,8 +76,16 @@ def register_manual(request):
                 grocery.image = filename
             else:
                 grocery.image = None
+
             grocery.save()
             request.session.pop('predicted_name', None)  # Remove the predicted name from the session
+
+            # 냉장고에 식재료 위치 배정
+            rst_instance = set_grocery_location(grocery.id, request.user.id)
+            if not rst_instance:
+                print("fridge is full")
+
+
             return redirect('refrigerators:index')
         else:
             error_message = '정보가 제대로 입력되지 않았습니다. 다시 입력해주세요.'
@@ -84,6 +95,9 @@ def register_manual(request):
         initial_data = {'name': predicted_name} if predicted_name else {}
         form = GrocForm(initial=initial_data)
         return render(request, 'refrigerators/crud_register.html', {'form': form})
+
+def register_picture(request):
+    pass
 
 def register_barcode(request):
     pass
@@ -101,7 +115,7 @@ def edit(request, pk):
         form = GrocForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             grocery = form.save(commit=False)
-               
+
             fs = FileSystemStorage()
             if request.POST.get('image-clear'):  # check if image field was cleared
                 # delete the old image file if it exists
@@ -133,6 +147,12 @@ def edit(request, pk):
 def delete(request, pk):
     grocery = get_object_or_404(Grocery, id=pk)
     grocery.delete()
+
+    # 냉장고에 식재료 위치 삭제
+    rst_instance = remove_grocery_location(pk, request.user.id)
+    if not rst_instance:
+        print("the deleted grocery doesn't have location")
+
     return redirect('refrigerators:index')
 
 # 식재료 사진 view
