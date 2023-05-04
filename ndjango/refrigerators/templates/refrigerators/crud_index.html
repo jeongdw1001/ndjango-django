@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% if user.is_authenticated %}
+
 {% if messages %}
     {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ message }}
-    </div>
+        {% if 'expired' in message.tags.split %}
+            <div class="alert alert-danger alert-dismissible d-flex align-items-center" role="alert">
+                <div class="flex-grow-1">{{ message }}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <a href="{% url 'refrigerators:expiring' %}" class="btn btn-primary ms-2">확인하기</a>
+            </div>
+        {% endif %}
+        {% if 'expiring' in message.tags.split %}
+            <div class="alert alert-warning alert-dismissible d-flex align-items-center" role="alert">
+                <div class="flex-grow-1">{{ message }}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <a href="{% url 'refrigerators:expiring' %}" class="btn btn-primary ms-2">확인하기</a>
+            </div>
+        {% endif %}
     {% endfor %}
 {% endif %}
 
@@ -42,7 +55,7 @@
                 <th>소비기한</th>
                 <th>사진</th>
                 <th>비고</th>
-                <th></th>
+                <th>구매</th>
             </thead>
             <tbody>
                 {% for grocery in grocery_list %}
@@ -50,7 +63,12 @@
                     <td>{{ forloop.revcounter }}</td>
                     <td><a href="{% url 'refrigerators:view' grocery.id %}">{{ grocery.name }}</a></td>
                     <td>{{ grocery.get_category_display_name }}</td>
-                    <td>{{ grocery.qty }}</td>
+                    <td>
+                        {{ grocery.qty }}
+                        {% if grocery.qty == 0 %}
+                            <span class="badge badge-danger" style="background-color: red; color: white;">Out</span>
+                        {% endif %}
+                    </td>
                     <td>{{ grocery.in_date|date:"Y-m-d" }}</td>
                     <td>{{ grocery.exp_date|date:"Y-m-d" }}</td>
                     {% if grocery.image %}
@@ -74,6 +92,40 @@
             </tbody>
         </table>
     </div>
+    <!-- 페이징 처리 --->
+    <div class="row my-3">
+        <div class="col-md-12 text-center">
+            {% if grocery_list.has_previous %}
+                <a href="?page=1">처음</a>
+                <a href="?page={{ grocery_list.previous_page_number }}">이전</a>
+            {% endif %}
+                <!-- 페이지리스트 -->
+                <span style="color:red;font-weight:bold;">{{ grocery_list.number }}</span>
+                <span> / </span>
+                <span style="font-weight:bold;">{{ grocery_list.paginator.num_pages }}</span>
+            {% if grocery_list.has_next %}
+                <a href="?page={{ grocery_list.next_page_number }}">다음</a>
+                <a href="?page={{ grocery_list.paginator.num_pages }}">끝</a>
+            {% endif %}
+
+        </div>
+    </div>
 </div>
 
+    {% else %}
+    <div class="container">
+        <div class="row pt-4 my-3">
+            <div class="col-md-12" style="float: left;">
+                <h3>로그인을 해 냉장고를 만드세요!</h3>
+            </div>
+        </div>
+    </div>
+
+{% endif %}
+
 {% endblock %}
+
+.badge-danger {
+    background-color: red;
+    color: white;
+}
