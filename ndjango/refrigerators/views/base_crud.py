@@ -85,7 +85,6 @@ def register_manual(request):
             if not rst_instance:
                 print("fridge is full")
 
-
             return redirect('refrigerators:index')
         else:
             error_message = '정보가 제대로 입력되지 않았습니다. 다시 입력해주세요.'
