@@ -57,7 +57,7 @@ def get_recipe_info(request):
         else:
             recipe_html = f"""
                 <div>
-                    <h2>레시피를 찾을 수 없었습니다.</h2>
+                    <h2>검색한 재료로 레시피를 찾을 수 없습니다.</h2>
                     다른 재료로 다시 검색해 볼까요?
                  <ul>
             """

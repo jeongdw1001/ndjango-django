@@ -14,6 +14,7 @@ from recsys.serializers import KoreanRecipeSerializer
 
 from refrigerators.models import Grocery
 from refrigerators.serializers import GrocerySerializer
+from setups import KOR_RECIPE_URL
 from users.models import CustomUser
 from users.serializer import CustomUserSerializer
 
@@ -34,7 +35,9 @@ def get_sorted_recipe_thumbnail(names):
 
 
 def korean_recipes(request):
-    url = '127.0.0.1:5000/recipes'
+    # url = '127.0.0.1:5000/recipes'
+    # url = '192.168.0.200:80/recipes'
+    url = KOR_RECIPE_URL
 
     if request.user.is_anonymous:
         return render(request, 'recsys_2/kor_404.html')

@@ -1,6 +1,7 @@
 {% load static %}
 <script type="text/javascript">var redipsURL = '/javascript/drag-and-drop-table-row/';</script>
 <link rel="stylesheet" href="{% static 'refrigerators/icon_display/two_doors.css' %}" type="text/css" media="screen" />
+<link rel="stylesheet" href="{% static 'refrigerators/icon_display/tooltip.css' %}" type="text/css" media="screen" />
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <!--<script type="text/javascript" src="{% static 'refrigerators/icon_display/redips-drag.js' %}"></script>-->
 <script type="text/javascript" src="{% static 'refrigerators/icon_display/redips-drag-min.js' %}"></script>
@@ -38,15 +39,20 @@
 					{% if v %}
 					<div class="redips-drag white">
 						<img src="data:image/png;base64, {{v.icon_img}}" style="width:15px;">
-						<a href="javascript:void(0)" title="{{v.str}}" class="cell-name">
+						<span class="tooltip-c">
+
 							{% if v.name|length <= 4 %}
-							{{ v.name|slice:":4" }}
+							{{ v.name }}
 							{% else %}
 							<span class="min-font-size">
-								{{ v.name }}
+								{{ v.name|slice:":4" }}
 							</span>
 							{% endif %}
-						</a>
+
+							<span class="tooltip-c-text">
+								{{v.str}}
+							</span>
+						</span>
 						<small name="uid" hidden="hidden">{{ v.id }}</small>
 					</div>
 					{% endif %}
@@ -85,15 +91,20 @@
 					<div class="redips-drag white">
 <!--						<img src="https://cdn-icons-png.flaticon.com/512/426/426750.png?w=1380&t=st=1681199906~exp=1681200506~hmac=fcb5f90ae7cb363b274dfed7153fa68dc76882a74a0463bac3c9dee263239c25" alt="사과" style="width:15px;">-->
 						<img src="data:image/png;base64, {{v.icon_img}}" style="width:15px;">
-						<a href="javascript:void(0)" title="{{v.str}}" class="cell-name">
+						<span class="tooltip-c">
+
 							{% if v.name|length <= 4 %}
-							{{ v.name|slice:":4" }}
+							{{ v.name }}
 							{% else %}
 							<span class="min-font-size">
-								{{ v.name }}
+								{{ v.name|slice:":4" }}
 							</span>
 							{% endif %}
-						</a>
+
+							<span class="tooltip-c-text">
+								{{v.str}}
+							</span>
+						</span>
 						<small name="uid" hidden="hidden">{{ v.id }}</small>
 					</div>
 					{% endif %}

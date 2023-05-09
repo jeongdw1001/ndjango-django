@@ -1,0 +1,21 @@
+.tooltip-c {
+    display: inline-block;
+    /*color: deeppink;*/
+    font-weight: bold;
+}
+
+.tooltip-c-text {
+    display: none;
+    position: absolute;
+    max-width: 250px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 4px;
+    font-size: 1em;
+    color: black;
+    background: white;
+}
+
+.tooltip-c:hover .tooltip-c-text {
+    display: block;
+}

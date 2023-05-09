@@ -6,6 +6,8 @@ from refrigerators.forms.photo_forms import PhotoForm
 from refrigerators.models.base_models import Grocery
 import requests
 
+from setups import PHOTO_URL
+
 '''
 음식 사진 입력 모듈
 '''
@@ -17,7 +19,8 @@ def photo_upload(request):
         if form.is_valid():
             # Pass image to the predict function
             image = form.cleaned_data['image']
-            response = requests.post('http://127.0.0.1:5000/predict', files={'image': image})
+            # response = requests.post('http://192.168.0.200:80/predict', files={'image': image})
+            response = requests.post(PHOTO_URL, files={'image': image})
             prediction = response.json()
             predicted_name = convert_to_grocery_data(prediction)['name']
             request.session['predicted_name'] = predicted_name
@@ -29,7 +32,9 @@ def photo_upload(request):
 # 사진 분석
 def process_image(image):
     # Flask 앱으로 접속해 분석 진행
-    url = 'http://localhost:5000/predict'
+    # url = 'http://localhost:5000/predict'
+    # url = 'http://192.168.0.200:80/predict'
+    url = PHOTO_URL
     files = {'image': image}
     response = requests.post(url, files=files)
     prediction = response.json()

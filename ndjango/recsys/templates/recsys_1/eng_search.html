@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
 <style>
@@ -8,17 +9,32 @@
 </style>
 
     <div class="container my-5">
+        <div class="row my-5 text-end bg-light">
+            <div class="col my-5">
+                <h2 class="display-5 text-secondary my-5 mb-3">International Recipes</h2>
+                <h4 class="fs-4 mb-4">냉장고에 있는 흔한 재료와 새로운 재료를 조합해 <br> 다양한 세계 음식을 만날 수 있어요.</h4>
+                <p class="text-secondary">냉장부 추천 해외 레시피로 <b class="text-primary">새로운 집밥의 세계를</b> 경험하세요!</p>
+            </div>
+            <div class="col text-center d-none d-md-block my-5">
+                <img src="{% static 'recsys/recsys_2/img/paella.jpg' %}" class="img-fluid rounded" alt="banner" style="max-width: 410px">
+            </div>
+        </div>
+
         <div class="row justify-content-center">
+
             <div class="col-md-6">
+
                 <div class="text-center mb-5">
-                    <h3 class="d-inline-block align-middle">해외 레시피 검색</h3>
+                    <h3 class="d-inline-block align-middle">해외 레시피 검색하기</h3>
                 </div>
+
                 <form action="eng_result/" method="get">
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" name="message" placeholder="원하는 식재료를 입력하세요 (여러개 입력시 콤마(,)로 구분)">
                         <button class="btn btn-primary" type="submit">검색</button>
                     </div>
                 </form>
+
             </div>
         </div>
     </div>

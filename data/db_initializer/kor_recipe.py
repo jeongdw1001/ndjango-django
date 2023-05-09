@@ -22,7 +22,7 @@ USER = 'ndjango'
 HOST = 'localhost'
 PASSWD = '1234'
 PORT = 3306
-DB = 'contents'
+DB = 'contents3'
 TABLE = 'recsys_koreanrecipe'
 
 # pymysql 세팅
