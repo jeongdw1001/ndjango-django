@@ -10,6 +10,7 @@ body {
     margin: 0;
     padding: 0;
     background: #f2f2f2;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 a {
@@ -103,7 +104,8 @@ a {
 .navbar_toggleBtn {
     display: none;
     position: absolute;
-    right: 125px;
+
+    right: 10px;
     font-size: 24px;
     color: var(--text-color);
 }
@@ -131,7 +133,7 @@ figure video {
 
 /* BUTTON */
 .button {
-    margin: 70px 40%;
+    margin: 70px 30%;
     display: block;
     font-size: 1.375rem;
     background: #0bd;
@@ -427,6 +429,7 @@ legend {
     /*font-size: 16px;*/
     border: none;
     cursor: pointer;
+
 }
 
 .dropbtn:hover, .dropbtn:focus {
@@ -434,9 +437,9 @@ legend {
 }
 
 .dropdown {
-    float: right;
-    position: relative;
-    display: inline-block;
+    /*float: right;*/
+    /*position: relative;*/
+    /*display: inline-block;*/
 }
 
 .dropdown-content {
@@ -461,3 +464,20 @@ legend {
 /*.dropdown a:hover {background-color: #ddd;}*/
 
 .show {display: block;}
+
+
+
+.menu-name {
+    text-decoration: none;
+}
+
+/* main banner*/
+
+.main-banner {
+    padding-top: 15px;
+    width: 60%;
+    height: auto;
+    margin: auto;
+    display: block;
+
+}
