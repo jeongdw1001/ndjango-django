@@ -39,20 +39,20 @@
 					{% if v %}
 					<div class="redips-drag white">
 						<img src="data:image/png;base64, {{v.icon_img}}" style="width:15px;">
-						<span class="tooltip-c">
+						<div class="tooltip-c">
 
 							{% if v.name|length <= 4 %}
 							{{ v.name }}
 							{% else %}
-							<span class="min-font-size">
+							<p class="min-font-size" style="display: inline">
 								{{ v.name|slice:":4" }}
-							</span>
+							</p>
 							{% endif %}
 
-							<span class="tooltip-c-text">
+							<p class="tooltip-c-text">
 								{{v.str}}
-							</span>
-						</span>
+							</p>
+						</div>
 						<small name="uid" hidden="hidden">{{ v.id }}</small>
 					</div>
 					{% endif %}
@@ -89,22 +89,21 @@
 				<td>
 					{% if v %}
 					<div class="redips-drag white">
-<!--						<img src="https://cdn-icons-png.flaticon.com/512/426/426750.png?w=1380&t=st=1681199906~exp=1681200506~hmac=fcb5f90ae7cb363b274dfed7153fa68dc76882a74a0463bac3c9dee263239c25" alt="사과" style="width:15px;">-->
-						<img src="data:image/png;base64, {{v.icon_img}}" style="width:15px;">
-						<span class="tooltip-c">
 
+						<img src="data:image/png;base64, {{v.icon_img}}" style="width:15px;">
+						<div class="tooltip-c">
 							{% if v.name|length <= 4 %}
 							{{ v.name }}
 							{% else %}
-							<span class="min-font-size">
+							<p class="min-font-size" style="display: inline">
 								{{ v.name|slice:":4" }}
-							</span>
+							</p>
 							{% endif %}
 
-							<span class="tooltip-c-text">
+							<p class="tooltip-c-text">
 								{{v.str}}
-							</span>
-						</span>
+							</p>
+						</div>
 						<small name="uid" hidden="hidden">{{ v.id }}</small>
 					</div>
 					{% endif %}

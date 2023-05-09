@@ -176,6 +176,7 @@ def serve_grocery_image(request, pk):
 
 def expiring_groceries(request):
     today = timezone.now().date()
-    expiring_groceries = Grocery.objects.filter(exp_date__lte=today + timezone.timedelta(days=3))
+    # expiring_groceries = Grocery.objects.filter(exp_date__lte=today + timezone.timedelta(days=3))
+    expiring_groceries = Grocery.objects.filter(userid_id=request.user).filter(exp_date__lte=today + timezone.timedelta(days=3)).order_by('exp_date')
     context = {'expiring_groceries': expiring_groceries}
     return render(request, 'refrigerators/expiring_groceries.html', context)

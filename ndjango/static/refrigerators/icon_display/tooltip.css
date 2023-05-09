@@ -19,3 +19,7 @@
 .tooltip-c:hover .tooltip-c-text {
     display: block;
 }
+
+.tooltip-c:dragover .tooltip-c-text {
+    display: none;
+}
