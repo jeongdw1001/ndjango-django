@@ -20,12 +20,12 @@ def convertToBinaryData(filename):
     return binaryData
 
 
-def insertBLOB(number, category, re_category, photo, db='contents'):
+def insertBLOB(number, category, re_category, photo, db='contents01'):
     print("Inserting BLOB into images table")
     try:
         connection = mysql.connector.connect(host='127.0.0.1',
                                              database=db,
-                                             user='ndjango',
+                                             user='ndjangoadmin',
                                              password='1234')
 
         cursor = connection.cursor()
@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
         # number, category, re_category, photo
 
-        # insertBLOB(idx+1, category_dict[record], record, item)
-        insertBLOB(idx+1, category_dict[record], record, item, db='contents3')
+        insertBLOB(idx+1, category_dict[record], record, item)
+        # insertBLOB(idx+1, category_dict[record], record, item, db='contents3')
 
 

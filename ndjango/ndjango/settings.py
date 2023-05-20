@@ -40,6 +40,7 @@ SECRET_KEY = get_secret("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -111,16 +112,16 @@ DATABASES = {
          'OPTIONS': {
              'sql_mode': 'traditional',
          },
-         'NAME': 'contents',
-         'USER': 'ndjango',
+         'NAME': 'contents01',
+         'USER': 'ndjangoadmin',
          'PASSWORD': '1234',
          'HOST': 'localhost',
          'PORT': '3306',
      }
 }
 
-TEST_DB = 'contents3'
-# TEST_DB = None
+# TEST_DB = 'contents3'
+TEST_DB = None
 
 if TEST_DB:
     DATABASES['default']['NAME'] = TEST_DB

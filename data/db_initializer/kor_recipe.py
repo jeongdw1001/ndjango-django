@@ -18,11 +18,11 @@ from sqlalchemy import create_engine
 import numpy as np
 
 
-USER = 'ndjango'
+USER = 'ndjangoadmin'
 HOST = 'localhost'
 PASSWD = '1234'
 PORT = 3306
-DB = 'contents3'
+DB = 'contents01'
 TABLE = 'recsys_koreanrecipe'
 
 # pymysql 세팅
