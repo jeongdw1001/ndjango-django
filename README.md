@@ -38,13 +38,13 @@
 - 팀명: 4조 냉장고의 문단속
 - 서비스명: 냉장고를 부탁해
 - 결과: 최우수상 수상🥇
-- PPT: [냉장고를 부탁해 상세 프레젠테이션 파일 (링크)](https://drive.google.com/file/d/1YKxu6dNL_basGfOEwP8P6_nkQ6PrEpWz/view?usp=sharing)
+- PPT: [냉장고를 부탁해 상세 프레젠테이션 파일 (링크)](https://drive.google.com/file/d/1AImhu5NfuJJGd9PoqO_krMV5TwC2dcui/view?usp=sharing)
 
 <br>
 
 ## 🎥 발표 자료
 > [냉장부 최종 발표-1 (링크)](https://drive.google.com/file/d/1ZtnB5hIt2oSLM9TFnMyfbGn5o5GBSRWT/view?usp=drive_link)<br>
->[냉장부 시연 (링크)](https://drive.google.com/file/d/1vuP53lkBDU6arAUSYjg2klwt57bhnNfh/view?usp=sharing)<br>
+>[냉장부 시연 (링크)](https://drive.google.com/file/d/13UJBP3doQ2ikBAs7CpSH9j4r7GAYM_Yk/view?usp=sharing)<br>
 >[냉장부 최종 발표-2 (링크)](https://drive.google.com/file/d/13Ji334LiHMTx-j94aoQaEDwpaUSklqDt/view?usp=sharing)
 
 
